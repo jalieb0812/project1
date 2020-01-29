@@ -1,0 +1,132 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Litigation Management
+{% endblock %}
+
+{% block main %}
+
+
+    <!-- http://getbootstrap.com/docs/4.1/content/typography/ -->
+    <h1 class="mb-3" lang=en>Form</h1>
+
+    <!-- http://getbootstrap.com/docs/4.1/components/forms/ -->
+    <form action="/litform" method="post" onsubmit="isOneChecked()">
+
+        <!-- JL form starts here -->
+
+
+         <div class="row ">
+
+            <div class="col">
+
+            <input autocomplete="on" autofocus class="form-control" name="client" placeholder="Client" type="text" required >
+           </div>
+
+         <div class="col" >
+            <input autocomplete="on"  class="form-control" name="case_name" placeholder="Case Name" type="text" required >
+         </div>
+
+
+         <div class="col" >
+            <input autocomplete="on"  class="form-control" name="court" placeholder="Court" type="text">
+        </div>
+
+         <div class="col" >
+            <input autocomplete="on"  class="form-control" name="Docket_No" placeholder="Docket_No" type="text">
+        </div>
+
+        </div>
+
+
+
+        <div class="form-row">
+
+         <div class="form-group col" >
+
+              <label class="form-check-label" for="Description">
+                        Description
+             </label>
+
+            <textarea rows="2" cols="25" autocomplete="on"  class="form-control" name="Description" placeholder="Description"> </textarea>
+
+        </div>
+
+
+        <div class="form-group col" >
+
+            <label class="form-check-label" for="Case_Status">
+                        Case_Status
+             </label>
+
+            <textarea rows="2" cols="25" autocomplete="on"  class="form-control" name="Case_Status" placeholder="Case_Status"> </textarea>
+
+            </div>
+
+        </div>
+
+      </div>
+
+    <div class="form-row">
+
+
+        <div class="form-group col" >
+             <label class="form-check-label" for="Parties">
+                        Parties
+             </label>
+            <textarea rows="2" cols="25" autocomplete="on"  class="form-control" name="Parties" placeholder="Parties"> </textarea>
+
+        </div>
+
+
+
+         <div class="form-group col" >
+
+             <label class="form-check-label" for="Upcoming_Deadlines">
+                        Upcoming_Deadlines
+             </label>
+
+            <textarea rows="2" cols="25" autocomplete="on"  class="form-control" name="Upcoming_Deadlines" placeholder="Upcoming_Deadlines"> </textarea>
+        </div>
+
+    </div>
+
+
+       <div class="form-row">
+        <div class="form-group col" >
+            <input autocomplete="on"  class="form-control" name=" Outside_Counsel_Defendant_Attorney" placeholder=" Outside_Counsel_Defendant_Attorney" type="text">
+        </div>
+
+        <div class="form-group col" >
+            <input autocomplete="on"  class="form-control" name=" Opposing_Counsel_Plaintiff_Attorney" placeholder=" Opposing_Counsel_Plaintiff_Attorney" type="text">
+        </div>
+
+     </div>
+
+
+
+             <label class="form-check-label" for="Notes">
+                        Notes
+             </label>
+         <div class="form-group" >
+            <textarea rows="3" cols="25" autocomplete="on"  class="form-control" name="Notes" placeholder="Notes"> </textarea>
+
+        </div>
+
+
+
+        <!-- http://getbootstrap.com/docs/4.1/components/buttons/ -->
+        <button class="btn btn-primary" type="submit" onclick="isOneChecked()">Submit</button>
+
+
+    </form>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+
+{% endblock %}
+

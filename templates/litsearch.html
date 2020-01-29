@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Litigation Search
+{% endblock %}
+
+{% block main %}
+
+    <h1> Choose to search by Client or Matter(s) but not both</h1>
+     <form action="/litsearch" method="post">
+
+         <div class="form-group">
+              <select autofocus class="form-log" name="client" style="width:50%">
+                <option disabled="" selected="" value="">client</option>
+                {% for client in clients %}
+                    <option value="{{ client.Client }}">{{ client.Client }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+              <select autofocus class="form-log" name="matter" style="width:50%">
+                <option disabled="" selected="" value="">Matter</option>
+                {% for matter in matters %}
+                    <option value="{{ matter.Case_Name }}">{{ matter.Case_Name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+{% endblock %}

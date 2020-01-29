@@ -1,0 +1,61 @@
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+
+{% block main %}
+
+   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+    <form action="/register"  id="registration" method = "post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="username" id="username" type="text">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="password" placeholder="Password" type="text">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="confirmation" placeholder="Confirmation" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Register</button>
+    </form>
+
+
+
+
+    <script>
+
+      
+$(function(){
+    $('form').on('submit', function (validate){
+        validate.preventDefault();
+        var username = $("#username").val();
+        $.get("/check?username=" + username, function(validation) {
+            if (validation == false){
+                alert("username not available. please choose another username");
+                document.getElementById("registration").submit();
+
+            }
+                else
+            {
+                  (document).getElementById("registration").submit();
+            }
+        });
+
+
+    });
+
+
+});
+
+
+
+</script>
+
+
+{% endblock %}

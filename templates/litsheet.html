@@ -1,0 +1,171 @@
+
+
+{% extends "layout.html" %}
+
+
+{% block title %}
+    LITIGATION SHEET
+{% endblock %}
+
+{% block main %}
+
+
+          <link href=https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css rel ="stylesheet">
+          <link href=https://cdn.datatables.net/buttons/1.6.0/css/buttons.dataTables.min.css rel="stylesheet">
+
+
+
+         <link href=https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css rel="stylesheet">
+         <link href=https://cdn.datatables.net/scroller/2.0.1/css/scroller.dataTables.min.css rel="stylesheet">
+
+
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+
+
+            <script src= https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js></script>
+             <script src=https://cdn.datatables.net/buttons/1.6.0/js/dataTables.buttons.min.js></script>
+             <script src=https://cdn.datatables.net/buttons/1.6.0/js/buttons.flash.min.js></script>
+             <script src=https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js></script>
+             <script src=https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js></script>
+             <script src=https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js></script>
+            <script src= https://cdn.datatables.net/buttons/1.6.0/js/buttons.html5.min.js></script>
+            <script src= https://cdn.datatables.net/buttons/1.6.0/js/buttons.print.min.js></script>
+
+           <script src= https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js></script>
+
+             <script src=https://cdn.datatables.net/buttons/1.6.0/js/buttons.colVis.min.js></script>
+
+             <script src=https://cdn.datatables.net/scroller/2.0.1/js/dataTables.scroller.min.js></script>
+<script>
+
+
+$(document).ready(function() {
+    $('#litigation_table').DataTable( {
+
+        responsive: true,
+        dom: 'Bfrtip',
+
+        scrollY:        '50vh',
+        scrollCollapse: true,
+        paging:         false,
+
+        "order": [[ 0, "desc" ]],
+
+        buttons: [
+            'copy', 'colvis', 'excel',  'csv', 'pdf', 'print',
+        ],
+
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false,
+                "searchable": true
+            },
+            {
+                "targets": [ 13 ],
+                "visible": false,
+                "searchable": true
+            }
+        ]
+
+    } );
+
+
+} );
+
+</script>
+
+
+ <h1>Litigation Records History</h1>
+
+
+
+    <table class = " table display table-bordered" id = "litigation_table" style="width:100%">
+        <thead>
+            <tr>
+                <th id = "row_entryid">Entry_ID</th>
+                <th data-priority="1" id = "row_client">Client</th>
+                <th data-priority="2" id = "row_casename">Case_Name</th>
+                <th data-priority="8" id = "row_court">Court</th>
+                <th data-priority="7" id = "row_docketno">Docket_No</th>
+               <th  data-priority="4" id = "row_parties"> Parties</th>
+               <th  data-priority="5" id =  "row_dattorney"> Defendant_Attorney</th>
+                <th data-priority="5" id = "row_pattorney"> Plaintiff_Attorney</th>
+                <th data-priority="3" id = "row_description">Description_of_the_Matter</th>
+                <th data-priority="4" id = "row_casestatus">Case_Status</th>
+                <th data-priority="4" id = "row_upcomingdeadlines">Upcoming_Deadlines</th>
+                <th data-priority="8" id = "row_notes">Notes</th>
+                <th data-priority="9" id = "row_date">Date_Entry</th>
+                <th data-priority="10" id = "row_userid">User_ID</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+
+
+              {% for matter in litigation_matters %}
+        <tr id = "tablerow" >
+
+            <td> {{ matter['Entry_ID']}}</td>
+            <td> {{ matter['Client']}}</td>
+            <td> {{ matter['Case_Name']}}</td>
+            <td> {{ matter['Court']}}</td>
+            <td> {{ matter['Docket_No']}}</td>
+            <td> {{ matter['Parties']}}</td>
+            <td> {{ matter['Outside_Counsel_Defendant_Attorney']}}</td>
+            <td> {{ matter['Opposing_Counsel_Plaintiff_Attorney']}}</td>
+            <td> {{ matter['Description']}}</td>
+            <td> {{ matter['Case_Status']}}</td>
+            <td> {{ matter['Upcoming_Deadlines']}}</td>
+            <td> {{ matter['Notes']}}</td>
+            <td> {{ matter['Date_Entry']}}</td>
+            <td> {{ matter['User_ID']}}</td>
+
+
+        </tr>
+        {% endfor %}
+
+        </tbody>
+
+          <tfoot>
+            <tr>
+                <th>Entry_ID</th>
+                <th>Client</th>
+                <th>Case_Name</th>
+                <th>Court</th>
+                <th>Docket_No</th>
+               <th> Parties</th>
+               <th> Outside_Counsel_
+               Defendant_Attorney</th>
+                <th>Opposing_Counsel_
+                Plaintiff_Attorney</th>
+                <th>Description_of_the_Matter</th>
+                <th>Case_Status</th>
+                <th>Upcoming_Deadlines</th>
+                <th>Notes</th>
+                <th>Date_Entry</th>
+                <th>User_ID</th>
+            </tr>
+        </tfoot>
+    </table>
+
+
+
+
+
+        </main>
+
+
+
+
+
+
+
+
+{% endblock %}
