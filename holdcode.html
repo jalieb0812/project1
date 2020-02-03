@@ -1,0 +1,114 @@
+holdcode.html
+{% extends "layout.html" %}
+
+{% block title %}
+    Home Page
+{% endblock %}
+
+{% block main %}
+
+
+              <!-- http://getbootstrap.com/docs/4.1/components/alerts/ -->
+    <h1>Welcome to JO's Book Review APP!</h1>
+
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <div class="container">
+          <h1 class="display-6">Jordan Lieber P.C.</h1>
+
+          {% if session.user_id %}
+
+          <ul class="navbar-nav mr-auto mt-2">
+              <li class="nav-item"><a class="nav-link" href="/litform">Litigation Management</a></li>
+              <li class="nav-item"><a class="nav-link" href="/litsearch">Litigation Search</a></li>
+
+          </ul>
+          <ul class="navbar-nav ml-auto mt-2">
+              <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+          </ul>
+
+          <h1>Book a Flight</h1>
+
+          <form action="{{ url_for('/') }}" method="post">
+
+              <div class="form-group">
+                  <select class="form-control" name="flight_id">
+                      {% for book in bookss %}
+                          <option value="{{ book.id }}">{{ book.title }} by {{ book.author }}</option>
+                      {% endfor %}
+                  </select>
+              </div>
+
+              <form action="/litform" method="post" onsubmit="isOneChecked()">
+
+                  <!-- JL form starts here -->
+
+
+                  <div class="row ">
+
+                      <div class="col">
+
+                      <input autocomplete="on" autofocus class="form-control" name="client" placeholder="Client" type="text" required >
+                     </div>
+
+                   <div class="col" >
+                      <input autocomplete="on"  class="form-control" name="case_name" placeholder="Case Name" type="text" required >
+                   </div>
+
+
+                   <div class="col" >
+                      <input autocomplete="on"  class="form-control" name="court" placeholder="Court" type="text">
+                  </div>
+
+                   <div class="col" >
+                      <input autocomplete="on"  class="form-control" name="Docket_No" placeholder="Docket_No" type="text">
+                  </div>
+
+                  </div>
+              <div class="form-group">
+                  <input class="form-control" name="name" placeholder="Passenger Name">
+              </div>
+
+              <div class="form-group">
+                  <button class="btn btn-primary">Book Flight</button>
+              </div>
+
+          </form>
+
+          {% else %}
+              <ul class="navbar-nav ml-auto mt-2">
+                  <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
+              </ul>
+
+            </div>
+          </div>
+            <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+          <div class="col-md-5">
+            <h2>Login or Register to use service</h2>
+            <p>Create a Matter Note Entry </p>
+            <p><a class="btn btn-secondary" href="/litform" role="button">Enter Matter Note &raquo;</a></p>
+          </div>
+          <div class="col-md-6">
+            <h2>Matter Search</h2>
+            <p>Search for Matters by Client or Matter: </p>
+            <p><a class="btn btn-secondary" href="/litsearch" role="button">Search Matters &raquo;</a></p>
+          </div>
+
+        </div>
+          {% endif %}
+
+
+
+            {% endblock %}
+        </main>
+
+        <footer class="small text-center text-muted">
+            Developed by Jordan Lieber
+        </footer>
+
+    </body>
+
+</html>

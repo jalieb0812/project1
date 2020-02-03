@@ -30,7 +30,10 @@ db = scoped_session(sessionmaker(bind=engine))
 @app.route("/")
 #@login_required
 def index():
-    return render_template("index.html")
+
+    books = db.execute("SELECT * FROM books").fetchall()
+    return render_template("index.html", books=books)
+
 
 
 @app.route("/check", methods=["GET"])
@@ -82,11 +85,41 @@ def login():
 
 
         # Redirect user to home page
-        return redirect("/")
+        return redirect("booksearch.html")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("login.html")
+
+
+@app.route("/booksearch", methods=["GET", "POST"])
+@login_required
+def book_search():
+
+    books = db.execute("SELECT * FROM books").fetchall()
+
+
+    if request.method == "GET":
+
+
+        return render_template("booksearch.html")
+
+
+    #rows = = db.execute("SELECT username FROM users")  # Query database for username
+
+
+    if request.method == "POST":
+        isbn = request.form.get("isbn")
+        title = request.form.get("title")
+        author = request.form.get("author")
+
+        book_matches = db.execute("SELECT isbn, title, author FROM books WHERE isbn= :isbn, OR \
+                title= :title, AND author= :author ",{"isbn": isbn, "title": title, "author": author}).fetchall()
+
+
+        #{Outside_Counsel_Defendant_Attorney} {Opposing_Counsel_Plaintiff_Attorney}")
+
+        return redirect("/litsearch", books=books, book_match=book_matches)
 
 
 @app.route("/logout")
