@@ -85,30 +85,33 @@ def booksearch():
 
         #{Outside_Counsel_Defendant_Attorney} {Opposing_Counsel_Plaintiff_Attorney}")
 
-        return render_template("/booksearchresult", books=books, isbn_matches=isbn_matches,
-         title_matches=title_matches, author_matches=author_matches)
+        return render_template("/booksearchresult", isbn_matches=isbn_matches,
+        title_matches=title_matches, author_matches=author_matches)
 
 
-@app.route("/booksearchresult", methods=["POST", "GET"])
+@app.route("/booksearchresult", methods=["GET", "POST"])
 @login_required
 def booksearchresult():
 
-    if request.method == "GET":
+
+    if request.method == "POST":
         return render_template("singlebooksearch.html")
 
-    books = db.execute("SELECT * FROM books").fetchall()
 
-    isbn_matches = db.execute("SELECT isbn, title, author FROM books WHERE isbn= :isbn",\
-            {"isbn": isbn}).fetchall()
+    if request.method=="GET":
 
-    title_matches = db.execute("SELECT title, isbn, author FROM books WHERE \
-                    title= :title",{ "title": title}).fetchall()
+        books = db.execute("SELECT * FROM books").fetchall()
 
-    author_matches = db.execute("SELECT author, title, isbn FROM books WHERE \
-                     author= :author ",{ "author": author}).fetchall()
+    #isbn_matches = db.execute("SELECT isbn, title, author FROM books WHERE isbn= :isbn",\
+            #{"isbn": isbn}).fetchall()
 
-    return render_template("booksearchresult.html", books=books, isbn_matches=isbn_matches,
-     title_matches=title_matches, author_matches=author_matches)
+    #title_matches = db.execute("SELECT title, isbn, author FROM books WHERE \
+                #    title= :title",{ "title": title}).fetchall()
+
+    #author_matches = db.execute("SELECT author, title, isbn FROM books WHERE \
+                     #author= :author ",{ "author": author}).fetchall()
+
+        return render_template("booksearchresult.html", books=books)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
