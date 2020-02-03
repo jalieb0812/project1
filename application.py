@@ -34,6 +34,9 @@ def index():
     books = db.execute("SELECT * FROM books").fetchall()
     return render_template("index.html", books=books)
 
+    if session.user_id:
+        return render_template('booksearch.html')
+
 
 
 @app.route("/check", methods=["GET"])
@@ -49,6 +52,63 @@ def check():
     else:
         return jsonify(False)
 
+@app.route("/booksearch", methods=["GET", "POST"])
+#@login_required
+def booksearch():
+
+    books = db.execute("SELECT * FROM books").fetchall()
+
+
+    if request.method == "GET":
+
+
+        return render_template("booksearch.html")
+
+
+    #rows = = db.execute("SELECT username FROM users")  # Query database for username
+
+
+    if request.method == "POST":
+        isbn = request.form.get("isbn")
+        title = request.form.get("title")
+        author = request.form.get("author")
+
+        isbn_matches = db.execute("SELECT isbn, title, author FROM books WHERE isbn= :isbn",\
+        {"isbn": isbn}).fetchall()
+
+        title_matches = db.execute("SELECT title, isbn, author FROM books WHERE \
+                title= :title",{ "title": title}).fetchall()
+
+        author_matches = db.execute("SELECT author, title, isbn FROM books WHERE \
+                 author= :author ",{ "author": author}).fetchall()
+
+
+        #{Outside_Counsel_Defendant_Attorney} {Opposing_Counsel_Plaintiff_Attorney}")
+
+        return render_template("/booksearchresult", books=books, isbn_matches=isbn_matches,
+         title_matches=title_matches, author_matches=author_matches)
+
+
+@app.route("/booksearchresult", methods=["POST", "GET"])
+@login_required
+def booksearchresult():
+
+    if request.method == "GET":
+        return render_template("singlebooksearch.html")
+
+    books = db.execute("SELECT * FROM books").fetchall()
+
+    isbn_matches = db.execute("SELECT isbn, title, author FROM books WHERE isbn= :isbn",\
+            {"isbn": isbn}).fetchall()
+
+    title_matches = db.execute("SELECT title, isbn, author FROM books WHERE \
+                    title= :title",{ "title": title}).fetchall()
+
+    author_matches = db.execute("SELECT author, title, isbn FROM books WHERE \
+                     author= :author ",{ "author": author}).fetchall()
+
+    return render_template("booksearchresult.html", books=books, isbn_matches=isbn_matches,
+     title_matches=title_matches, author_matches=author_matches)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -85,41 +145,14 @@ def login():
 
 
         # Redirect user to home page
-        return redirect("booksearch.html")
+        return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("login.html")
 
 
-@app.route("/booksearch", methods=["GET", "POST"])
-@login_required
-def book_search():
 
-    books = db.execute("SELECT * FROM books").fetchall()
-
-
-    if request.method == "GET":
-
-
-        return render_template("booksearch.html")
-
-
-    #rows = = db.execute("SELECT username FROM users")  # Query database for username
-
-
-    if request.method == "POST":
-        isbn = request.form.get("isbn")
-        title = request.form.get("title")
-        author = request.form.get("author")
-
-        book_matches = db.execute("SELECT isbn, title, author FROM books WHERE isbn= :isbn, OR \
-                title= :title, AND author= :author ",{"isbn": isbn, "title": title, "author": author}).fetchall()
-
-
-        #{Outside_Counsel_Defendant_Attorney} {Opposing_Counsel_Plaintiff_Attorney}")
-
-        return redirect("/litsearch", books=books, book_match=book_matches)
 
 
 @app.route("/logout")
