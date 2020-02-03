@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Litigation Search
+    booksearchresult
 {% endblock %}
 
 {% block main %}
@@ -10,34 +10,40 @@
 
 
 
+        <div >
 
-           <div class="form-group">
-               <select class="form-control" name="isbn_matches">
+
+
+           <ul>
                    {% for book in isbn_matches %}
+
+                   <li>
                        <option value="{{ book.id }}">{{ book.title }} by {{ book.author }}</option>
                    {% endfor %}
-               </select>
-           </div>
+                   </li>
 
-         <div class="form-group">
-              <select autofocus class="form-log" name="title_matches" style="width:50%">
-                <option disabled="" selected="" value="">client</option>
-                {% for book in title_matches %}
-                    <option value="{{ book.book_id }}">{{ book.title }}</option>
-                {% endfor %}
-            </select>
-        </div>
+    <li>
 
-        <div class="form-group">
-              <select autofocus class="form-log" name="author_matches" style="width:50%">
-                <option disabled="" selected="" value="">Matter</option>
-                {% for book in author_matches %}
-                    <option value="{{ book }}">{{ book.author }}</option>
-                {% endfor %}
-            </select>
-        </div>
+      {% for book in title_matches %}
+          <option value="{{ book.book_id }}">{{ book.title }}</option>
+      {% endfor %}
 
-        <button class="btn btn-primary" type="submit">Submit</button>
+    </li>
+
+
+    <li>
+
+      {% for book in author_matches %}
+          <option value="{{ book }}">{{ book.author }}</option>
+      {% endfor %}
+
+    </li>
+
+
+
+</div>
+
+
 
 
 

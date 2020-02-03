@@ -85,7 +85,7 @@ def booksearch():
 
         #{Outside_Counsel_Defendant_Attorney} {Opposing_Counsel_Plaintiff_Attorney}")
 
-        return render_template("/booksearchresult", isbn_matches=isbn_matches,
+        return render_template("booksearchresult.html", isbn_matches=isbn_matches,
         title_matches=title_matches, author_matches=author_matches)
 
 
