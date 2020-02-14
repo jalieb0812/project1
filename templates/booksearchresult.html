@@ -6,7 +6,7 @@
 
 {% block main %}
 
-    <h1> Choose to search by Client or Matter(s) but not both</h1>
+    <h1> Click a book to see more book details or leave a review</h1>
 
 
 
@@ -14,37 +14,67 @@
 
 
 
-           <ul>
-                   {% for book in isbn_matches %}
+      <ul>
 
-                   <li>
-                       <option value="{{ book.id }}">{{ book.title }} by {{ book.author }}</option>
-                   {% endfor %}
-                   </li>
+        {% for book in isbn_matches %}
 
-    <li>
+      <li>
 
-      {% for book in title_matches %}
-          <option value="{{ book.book_id }}">{{ book.title }}</option>
-      {% endfor %}
-
-    </li>
+               <a href="  {{ url_for('book', isbn=isbn, data=data) }}">{{ book.isbn, book.title, book.author, book.year }}"
+          {% endfor %}
+      </li>
 
 
-    <li>
+    </ul>
 
-      {% for book in author_matches %}
-          <option value="{{ book }}">{{ book.author }}</option>
-      {% endfor %}
 
-    </li>
+    <ul>
+        {% for book in isbn_matches %}
+            <li>
+                <a href="{{ url_for('book', isbn=isbn, data=data) }}">
+                  {{ book.isbn, book.title, book.author, book.year }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+
+          <ul>
+              {% for book in isbn_matches %}
+                  <li>
+                      <a href="{{ url_for('book', isbn=isbn, data=data) }}">
+                          {{ book.title }} by {{ book.author }}
+                      </a>
+                  </li>
+              {% endfor %}
+          </ul>
+
+
+          <ul>
+              {% for book in title_matches %}
+                  <li>
+                      <a href="{{ url_for('book', isbn=isbn, data=data) }}">
+                          {{ book.title }} by {{ book.author }}
+                      </a>
+                  </li>
+              {% endfor %}
+          </ul>
+
+
+          <ul>
+              {% for book in author_matches %}
+                  <li>
+                      <a href="{{ url_for('book', isbn=isbn, data=data) }}">
+                          {{ book.title }} by {{ book.author }} with {{book.isbn}} in the year {{book.year}}
+                      </a>
+                  </li>
+              {% endfor %}
+          </ul>
+
 
 
 
 </div>
-
-
-
 
 
 

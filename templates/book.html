@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Book
+{% endblock %}
+
+{% block main %}
+    <h1>Book Details</h1>
+
+
+
+
+    <ul>
+
+
+      {% for books in data.books %}
+
+      <li>{{[id]}}</li>
+        <li>{{['books']['ratings_count']}}</li>
+      <li>{{'books'['id']}}</li>
+      <li>['books']['id']</li>
+      <li>{{books.reviews_count}}</li>
+        <li>Ratings Count: {{ books.ratings_count}}</li>
+        <li>Review Count: {{ books.reviews_count}}</li>
+        <li>Aerage Rating: {{ books.average_rating}}</li>
+      {% endfor %}
+
+
+    </ul>
+
+
+
+{% endblock %}

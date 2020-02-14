@@ -1,5 +1,6 @@
 import os
 
+
 from flask import Flask, session, jsonify, redirect, render_template, request, flash
 from flask_session import Session
 from sqlalchemy import create_engine
@@ -8,9 +9,28 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required, lookup, usd
+
+
+from helpers import apology, login_required
 from datetime import datetime, date
 
+import requests
+#from goodreads import *
+
+
+"""
+# set DATABASE_URL postgres://cdrljlpkrqgdal:ac57ec3da706c0b5958d7132cb40b44f2473249664d7e1c746400a7520c406b9@ec2-174-129-43-40.compute-1.amazonaws.com:
+5432/dfihju0alucdaq
+
+host ec2-174-129-43-40.compute-1.amazonaws.com
+Database dfihju0alucdaq
+User cdrljlpkrqgdal
+Port 5432
+Password  ac57ec3da706c0b5958d7132cb40b44f2473249664d7e1c746400a7520c406b
+Heroku CLI heroku pg:psql postgresql-pointy-42116 --app jobookap
+FLASK_APP=application.py
+
+"""
 app = Flask(__name__)
 
 # Check for environment variable
@@ -34,8 +54,8 @@ def index():
     books = db.execute("SELECT * FROM books").fetchall()
     return render_template("index.html", books=books)
 
-    if session.user_id:
-        return render_template('booksearch.html')
+#    if session.user_id:
+#        return render_template('booksearch.html')
 
 
 
@@ -53,65 +73,217 @@ def check():
         return jsonify(False)
 
 @app.route("/booksearch", methods=["GET", "POST"])
+
+
 #@login_required
 def booksearch():
 
-    books = db.execute("SELECT * FROM books").fetchall()
+    if request.method == "POST":
+
+        books = db.execute("SELECT * FROM books").fetchall()
+
+        print(books[1])
+
+        isbn = request.form.get("isbn")
+
+        title = request.form.get("title")
+        author = request.form.get("author")
+
+        #book_id= db.execute("SELECT book_id, isbn, title, author, year FROM books WHERE \
+        #isbn= :isbn", { "isbn": isbn}).fetchall()
+
+        isbn_matches = db.execute("SELECT book_id, isbn, title, author, year FROM books WHERE \
+        isbn= :isbn", { "isbn": isbn}).fetchall()
+
+        #isbn=isbn_matches
+
+        print(isbn_matches)
+        print(f"this is the number: {isbn}")
 
 
-    if request.method == "GET":
+
+        title_matches = db.execute("SELECT book_id, title, isbn, author, year FROM books WHERE \
+            title= :title",{ "title": title}).fetchall()
+
+        author_matches = db.execute("SELECT book_id, author, title, isbn, year FROM books WHERE \
+             author= :author ",{ "author": author}).fetchall()
+
+        book_id = db.execute("SELECT book_id FROM books WHERE \
+            title= :title", { "title": title}).fetchall()
 
 
+
+    #{Outside_Counsel_Defendant_Attorney} {Opposing_Counsel_Plaintiff_Attorney}")
+    #
+
+        key = 'BXNCOXAo2IEQ56qLvIrow'
+
+        data=requests.get("https://www.goodreads.com/book/review_counts.json", params={'key': key, 'isbns': isbn})
+
+        data=data.json()
+
+        print(data)
+        print(f"this is the id: {data['books'][0]['id']}")
+        print("working?")
+        return render_template("booksearchresult.html", book_id=book_id, title_matches=title_matches,author_matches=author_matches, isbn=isbn, isbn_matches=isbn_matches, data=data)
+    else:
         return render_template("booksearch.html")
 
 
     #rows = = db.execute("SELECT username FROM users")  # Query database for username
 
 
-    if request.method == "POST":
-        isbn = request.form.get("isbn")
-        title = request.form.get("title")
-        author = request.form.get("author")
-
-        isbn_matches = db.execute("SELECT isbn, title, author FROM books WHERE isbn= :isbn",\
-        {"isbn": isbn}).fetchall()
-
-        title_matches = db.execute("SELECT title, isbn, author FROM books WHERE \
-                title= :title",{ "title": title}).fetchall()
-
-        author_matches = db.execute("SELECT author, title, isbn FROM books WHERE \
-                 author= :author ",{ "author": author}).fetchall()
-
-
-        #{Outside_Counsel_Defendant_Attorney} {Opposing_Counsel_Plaintiff_Attorney}")
-
-        return render_template("booksearchresult.html", isbn_matches=isbn_matches,
-        title_matches=title_matches, author_matches=author_matches)
-
 
 @app.route("/booksearchresult", methods=["GET", "POST"])
-@login_required
+#@login_required
 def booksearchresult():
 
-
     if request.method == "POST":
-        return render_template("singlebooksearch.html")
+
+        isbn=isbn
+
+        print(isbn)
+
+        print(isbn_matches)
+
+        #book_id=db.execute("SELECT book_id FROM books WHERE book_id = :book_id ", {"book_id": book_id}).fetchone()
+        #print(book_id)
+
+    #    isbn = db.execute("SELECT isbn FROM books WHERE book_id = :book_id ", {"book_id": book_id}).fetchone()
+        #print(isbn)
 
 
-    if request.method=="GET":
+        #isbns = isbn[0].strip(',')
+
+    #title=titles[0]
+
+    #isbn.append(isbns)
+
+    #    print(isbns)
+        #print(isbn)
+
+
+
+    #KEY = 'cV3D4w3DRDPIeWOqgHZ20g' old
+
+    #    key = 'BXNCOXAo2IEQ56qLvIrow'
+
+    #res=requests.get(f"https://www.goodreads.com/book/title.json", params={'key':  'key', 'title': title})
+
+
+        #data=requests.get("https://www.goodreads.com/book/review_counts.json", params={'key': key, 'isbns': isbn})
+
+        #print(key)
+    #{'key': 'KEY', 'isbns': isbns})
+
+    #res=requests.get(f"https://www.goodreads.com/book/review_counts.json?isbns={isbns}&key={KEY}")
+
+    #https://www.goodreads.com/book/review_counts.json
+
+        #print(data)
+        #if res.status_code != 200:
+            #raise Exception("ERROR: API request unsuccessful")
+
+    #data=res.json()
+
 
         books = db.execute("SELECT * FROM books").fetchall()
 
-    #isbn_matches = db.execute("SELECT isbn, title, author FROM books WHERE isbn= :isbn",\
-            #{"isbn": isbn}).fetchall()
+        print(isbn)
 
-    #title_matches = db.execute("SELECT title, isbn, author FROM books WHERE \
-                #    title= :title",{ "title": title}).fetchall()
+        print(f"this is the second isbn number in BOOK search is {isbn}")
 
-    #author_matches = db.execute("SELECT author, title, isbn FROM books WHERE \
-                     #author= :author ",{ "author": author}).fetchall()
+        for item in isbn:
+            print(item)
 
-        return render_template("booksearchresult.html", books=books)
+
+
+    #isbn = db.execute("SELECT isbn FROM books WHERE isbn = :isbn ", {"isbn": isbn}).fetchone()
+        print(isbn)
+
+        key = 'BXNCOXAo2IEQ56qLvIrow'
+
+        data=requests.get("https://www.goodreads.com/book/review_counts.json", params={'key': key, 'isbns': isbn})
+
+        data=data.json()
+
+        print(data)
+        print(f"this is {data.ratings_count}")
+        print("working?")
+
+
+        return render_template("book.html", book_id=book_id,  title_matches=title_matches, author_matches=author_matches, isbn=isbn, isbn_matches=isbn_matches, data=data)
+    else:
+        return render_template("booksearchresult.html")
+
+
+# key: BXNCOXAo2IEQ56qLvIrow      new
+# secret: kYXsLWtrfcva8ebbwoJHiQb7AzRa33rQaZFoq7Ecx0   new
+
+#key: cV3D4w3DRDPIeWOqgHZ20g old
+#secret: OC64ecQZBHhItgDe2xYq9ZnfeE4wDkt7hPS1z4VKo old
+
+
+@app.route("/book/<isbn>",  methods=["GET", "POST"])
+#@login_required
+def book(isbn):
+
+    if request.method=="GET":
+        books = db.execute("SELECT * FROM books").fetchall()
+
+        print(isbn)
+
+        print(f"this is the second isbn number is {isbn}")
+
+        for item in isbn:
+            print(item)
+
+
+
+        #isbn = db.execute("SELECT isbn FROM books WHERE isbn = :isbn ", {"isbn": isbn}).fetchone()
+        print(isbn)
+
+        key = 'BXNCOXAo2IEQ56qLvIrow'
+
+        data=requests.get("https://www.goodreads.com/book/review_counts.json", params={'key': key, 'isbns': isbn})
+
+        print(data)
+
+        data=data.json()
+
+        print(data)
+        return render_template('book.html', data=data)
+
+
+    if request.method=="POST":
+
+        books = db.execute("SELECT * FROM books").fetchall()
+
+        print(isbn)
+
+        print(f"this is the second isbn number is {isbn}")
+
+        for item in isbn:
+            print(item)
+
+
+
+        #isbn = db.execute("SELECT isbn FROM books WHERE isbn = :isbn ", {"isbn": isbn}).fetchone()
+        print(isbn)
+
+        key = 'BXNCOXAo2IEQ56qLvIrow'
+
+        data=requests.get("https://www.goodreads.com/book/review_counts.json", params={'key': key, 'isbns': isbn})
+
+        print(data.json())
+
+
+        return render_template('book.html', data=data)
+
+
+
+
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -148,7 +320,7 @@ def login():
 
 
         # Redirect user to home page
-        return redirect("/")
+        return redirect("/booksearch")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -238,5 +410,6 @@ for code in default_exceptions:
 
 
 if __name__ == "__main__":
- port = int(os.environ.get("PORT", 8080))
- app.run(host="0.0.0.0", port=port)
+    main()
+ #port = int(os.environ.get("PORT", 8080))
+ #app.run(host="0.0.0.0", port=port)
