@@ -74,15 +74,16 @@ def check():
 
 @app.route("/booksearch", methods=["GET", "POST"])
 
-
 #@login_required
 def booksearch():
+    if request.method == "GET":
+        return render_template("booksearch.html")
 
     if request.method == "POST":
 
         books = db.execute("SELECT * FROM books").fetchall()
 
-        print(books[1])
+
 
         isbn = request.form.get("isbn")
 
@@ -91,6 +92,9 @@ def booksearch():
 
         #book_id= db.execute("SELECT book_id, isbn, title, author, year FROM books WHERE \
         #isbn= :isbn", { "isbn": isbn}).fetchall()
+
+        matches= db.execute("SELECT book_id, isbn, title, author, year FROM books WHERE \
+        isbn= :isbn OR title= :title OR author= :author" , { "isbn": isbn, "title": title, "author": author} ).fetchall()
 
         isbn_matches = db.execute("SELECT book_id, isbn, title, author, year FROM books WHERE \
         isbn= :isbn", { "isbn": isbn}).fetchall()
@@ -124,106 +128,53 @@ def booksearch():
 
         print(data)
         print(f"this is the id: {data['books'][0]['id']}")
+        print(f"this is the id: {data['books'][0]['id']}")
         print("working?")
-        return render_template("booksearchresult.html", book_id=book_id, title_matches=title_matches,author_matches=author_matches, isbn=isbn, isbn_matches=isbn_matches, data=data)
-    else:
-        return render_template("booksearch.html")
-
-
-    #rows = = db.execute("SELECT username FROM users")  # Query database for username
 
 
 
-@app.route("/booksearchresult", methods=["GET", "POST"])
+        return redirect("booksearchresult.html", book_id=book_id, title_matches=title_matches, matches=matches, author_matches=author_matches, isbn=isbn, isbn_matches=isbn_matches, data=data)
+
+@app.route("/booksearchresult", methods=["POST"])
 #@login_required
 def booksearchresult():
 
-    if request.method == "POST":
+        isbn = request.form.get("isbn")
+        title = request.form.get("title")
+        author = request.form.get("author")
 
-        isbn=isbn
 
-        print(isbn)
+
+        #book_id= db.execute("SELECT book_id, isbn, title, author, year FROM books WHERE \
+        #isbn= :isbn", { "isbn": isbn}).fetchall()
+
+        matches= db.execute("SELECT book_id, isbn, title, author, year FROM books WHERE \
+        isbn= :isbn OR title= :title OR author= :author" , { "isbn": isbn, "title": title, "author": author} ).fetchall()
+
+        isbn_matches = db.execute("SELECT book_id, isbn, title, author, year FROM books WHERE \
+        isbn= :isbn", { "isbn": isbn}).fetchall()
+
+        #isbn=isbn_matches
 
         print(isbn_matches)
-
-        #book_id=db.execute("SELECT book_id FROM books WHERE book_id = :book_id ", {"book_id": book_id}).fetchone()
-        #print(book_id)
-
-    #    isbn = db.execute("SELECT isbn FROM books WHERE book_id = :book_id ", {"book_id": book_id}).fetchone()
-        #print(isbn)
-
-
-        #isbns = isbn[0].strip(',')
-
-    #title=titles[0]
-
-    #isbn.append(isbns)
-
-    #    print(isbns)
-        #print(isbn)
+        print(f"this is the number: {isbn}")
 
 
 
-    #KEY = 'cV3D4w3DRDPIeWOqgHZ20g' old
+        title_matches = db.execute("SELECT book_id, title, isbn, author, year FROM books WHERE \
+            title= :title",{ "title": title}).fetchall()
 
-    #    key = 'BXNCOXAo2IEQ56qLvIrow'
+        author_matches = db.execute("SELECT book_id, author, title, isbn, year FROM books WHERE \
+             author= :author ",{ "author": author}).fetchall()
 
-    #res=requests.get(f"https://www.goodreads.com/book/title.json", params={'key':  'key', 'title': title})
+        book_id = db.execute("SELECT book_id FROM books WHERE \
+            title= :title", { "title": title}).fetchall()
 
+        book_choice = request.form.get("book_choice")
 
-        #data=requests.get("https://www.goodreads.com/book/review_counts.json", params={'key': key, 'isbns': isbn})
+        print(f"this is the book choice {book_choice}")
 
-        #print(key)
-    #{'key': 'KEY', 'isbns': isbns})
-
-    #res=requests.get(f"https://www.goodreads.com/book/review_counts.json?isbns={isbns}&key={KEY}")
-
-    #https://www.goodreads.com/book/review_counts.json
-
-        #print(data)
-        #if res.status_code != 200:
-            #raise Exception("ERROR: API request unsuccessful")
-
-    #data=res.json()
-
-
-        books = db.execute("SELECT * FROM books").fetchall()
-
-        print(isbn)
-
-        print(f"this is the second isbn number in BOOK search is {isbn}")
-
-        for item in isbn:
-            print(item)
-
-
-
-    #isbn = db.execute("SELECT isbn FROM books WHERE isbn = :isbn ", {"isbn": isbn}).fetchone()
-        print(isbn)
-
-        key = 'BXNCOXAo2IEQ56qLvIrow'
-
-        data=requests.get("https://www.goodreads.com/book/review_counts.json", params={'key': key, 'isbns': isbn})
-
-        data=data.json()
-
-        print(data)
-        print(f"this is {data.ratings_count}")
-        print("working?")
-
-
-        return render_template("book.html", book_id=book_id,  title_matches=title_matches, author_matches=author_matches, isbn=isbn, isbn_matches=isbn_matches, data=data)
-    else:
-        return render_template("booksearchresult.html")
-
-
-# key: BXNCOXAo2IEQ56qLvIrow      new
-# secret: kYXsLWtrfcva8ebbwoJHiQb7AzRa33rQaZFoq7Ecx0   new
-
-#key: cV3D4w3DRDPIeWOqgHZ20g old
-#secret: OC64ecQZBHhItgDe2xYq9ZnfeE4wDkt7hPS1z4VKo old
-
-
+        return render_template("booksearchresult.html", book_id=book_id, title_matches=title_matches, matches=matches, author_matches=author_matches, isbn=isbn, isbn_matches=isbn_matches)
 @app.route("/book/<isbn>",  methods=["GET", "POST"])
 #@login_required
 def book(isbn):
@@ -231,9 +182,15 @@ def book(isbn):
     if request.method=="GET":
         books = db.execute("SELECT * FROM books").fetchall()
 
+        book_choice= request.form.get("book_choice")
+        print(f"this is the book chosen: {book_choice}")
+
         print(isbn)
 
         print(f"this is the second isbn number is {isbn}")
+
+        bookinfo= db.execute("SELECT book_id, isbn, title, author, year FROM books WHERE \
+            isbn= :isbn ", { "isbn": isbn} ).fetchall()
 
         for item in isbn:
             print(item)
@@ -247,12 +204,14 @@ def book(isbn):
 
         data=requests.get("https://www.goodreads.com/book/review_counts.json", params={'key': key, 'isbns': isbn})
 
+        if data.status_code != 200:
+            return apology("ERROR: invalid isbn number, please try another entry", 422)
         print(data)
 
         data=data.json()
 
         print(data)
-        return render_template('book.html', data=data)
+        return render_template('book.html', data=data, isbn=isbn, bookinfo=bookinfo)
 
 
     if request.method=="POST":
@@ -317,10 +276,8 @@ def login():
         session["user_id"] = rows[0]["id"]
 
 
-
-
         # Redirect user to home page
-        return redirect("/booksearch")
+        return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:

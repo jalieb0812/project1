@@ -8,23 +8,29 @@
     <h1>Book Details</h1>
 
 
+  {% for book in bookinfo %}
+
+    <h3> {{ book.title }} by {{ book.author }}</h3>
+
+
 
 
     <ul>
+      <li>ISBN No: {{book.isbn}}</li>
+      <li> Publication year: {{book.year}}</li>
+    </ul>
 
+  {% endfor %}
+
+    <p>Goodreads ratings data below: </p>
+
+    <ul>
 
       {% for books in data.books %}
-
-      <li>{{[id]}}</li>
-        <li>{{['books']['ratings_count']}}</li>
-      <li>{{'books'['id']}}</li>
-      <li>['books']['id']</li>
-      <li>{{books.reviews_count}}</li>
         <li>Ratings Count: {{ books.ratings_count}}</li>
         <li>Review Count: {{ books.reviews_count}}</li>
         <li>Aerage Rating: {{ books.average_rating}}</li>
       {% endfor %}
-
 
     </ul>
 

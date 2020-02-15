@@ -43,8 +43,8 @@
 
                 {% if session.user_id %}
                     <ul class="navbar-nav mr-auto mt-2">
-                        <li class="nav-item"><a class="nav-link" href="/litform">Litigation Management</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/litsearch">Litigation Search</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/">Book Review</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/booksearch">Book Search</a></li>
 
                     </ul>
                     <ul class="navbar-nav ml-auto mt-2">
@@ -62,7 +62,7 @@
         {% if get_flashed_messages() %}
             <header>
                 <div class="alert alert-primary border text-center" role="alert">
-                    {{ get_flashed_messages() | join(" ") }}
+                    {{ get_flashed_messages() | join("Successful Registration!") }}
                 </div>
             </header>
         {% endif %}

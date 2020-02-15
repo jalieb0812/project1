@@ -6,75 +6,101 @@
 
 {% block main %}
 
-    <h1> Click a book to see more book details or leave a review</h1>
+    <h4>Your search results are below</h4>
 
+    <h5> Click a book to see more book details or leave a review </h5>
 
+    <p></p>
 
         <div >
 
-
-
-      <ul>
-
-        {% for book in isbn_matches %}
-
-      <li>
-
-               <a href="  {{ url_for('book', isbn=isbn, data=data) }}">{{ book.isbn, book.title, book.author, book.year }}"
-          {% endfor %}
-      </li>
-
-
-    </ul>
-
-
+<p>search results by isbn matches</p>
     <ul>
         {% for book in isbn_matches %}
             <li>
-                <a href="{{ url_for('book', isbn=isbn, data=data) }}">
+                <a href="{{ url_for('book', isbn=book.isbn, title=book.title, author=book.author, year=book.year, data=data) }}">
                   {{ book.isbn, book.title, book.author, book.year }}
                 </a>
             </li>
+            {% else %}
+            <li>None</li>
         {% endfor %}
     </ul>
 
-
+<p>search results by isbn matches</p>
           <ul>
               {% for book in isbn_matches %}
                   <li>
-                      <a href="{{ url_for('book', isbn=isbn, data=data) }}">
-                          {{ book.title }} by {{ book.author }}
+                      <a href="{{ url_for('book', isbn=book.isbn, title=book.title, author=book.author, year=book.year, data=data) }}">
+                          {{ book.title }} by {{ book.author }} with ISBN No. {{book.isbn}} published in the year {{book.year}}
                       </a>
                   </li>
+                  {% else %}
+                  <li>None</li>
               {% endfor %}
           </ul>
 
+<p>search results by Title matches</p>
 
           <ul>
               {% for book in title_matches %}
                   <li>
-                      <a href="{{ url_for('book', isbn=isbn, data=data) }}">
-                          {{ book.title }} by {{ book.author }}
+                      <a href="{{ url_for('book', isbn=book.isbn, title=book.title, author=book.author, year=book.year, data=data) }}">
+                          {{ book.title }} by {{ book.author }} with ISBN No. {{book.isbn}} published in the year {{book.year}}
                       </a>
                   </li>
+
+                  {% else %}
+                  <li>None</li>
               {% endfor %}
           </ul>
 
-
+<p>search results by author</p>
           <ul>
               {% for book in author_matches %}
                   <li>
-                      <a href="{{ url_for('book', isbn=isbn, data=data) }}">
-                          {{ book.title }} by {{ book.author }} with {{book.isbn}} in the year {{book.year}}
+                      <a href="{{ url_for('book', isbn=book.isbn, title=book.title, author=book.author, year=book.year, data=data) }}">
+                          {{ book.title }} by {{ book.author }} with ISBN No. {{book.isbn}} published in the year {{book.year}}
                       </a>
                   </li>
+
+                  {% else %}
+                  <li>None</li>
               {% endfor %}
           </ul>
 
 
+<p>books results by title or author</p>
+<form action="/book/{{isbn}}" method="post" >
+<div class="form-group">
+
+      <select autofocus class="form-log" name="book_choice" style="width:50%">
+        <option disabled="" selected="" value="">book</option>
+          {% for book in matches %}
+      <<option value="{{ book.title }} by {{ book.author }} with IBSN nunumber:{{book.isbn}} Published in the year {{book.year}}">{{ book.title }} by {{ book.author }} with {{book.isbn}} in the year {{book.year}}</option>
+
+          {% endfor %}
+      </select>
+  </div>
+
+    <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+
+<p>books results by title or author</p>
+<form action="/book/{{isbn}}" method="post" >
+<div class="form-group">
+
+      <select autofocus class="form-log" name="book_choice2" style="width:50%" onchange="location = this.value;">
+        <option disabled="" selected="" value="">book</option>
+          {% for book in matches %}
+      <option value="{{ url_for('book', isbn=isbn.book, title=book.title, author=book.author, year=book.year, data=data) }}">{{ book.title }} by {{ book.author }} with {{book.isbn}} in the published in the year {{book.year}}</option>
+
+          {% endfor %}
+      </select>
+  </div>
 
 
-</div>
+</form>
 
 
 
