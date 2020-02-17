@@ -30,10 +30,97 @@
         <li>Ratings Count: {{ books.ratings_count}}</li>
         <li>Review Count: {{ books.reviews_count}}</li>
         <li>Aerage Rating: {{ books.average_rating}}</li>
+
+        {% else %}
+        <li>None</li>
       {% endfor %}
 
     </ul>
 
+  <p>Reivew rating: </p>
+<ul>
 
+  {% for book in review_data %}
+
+  <li>Review username: {{book.username}}</li>
+  <li>Book rating: {{book.book_rating}}</li>
+  <li>Review text: {{book.review_text}}</li>
+
+
+    {% endfor %}
+</ul>
+    <h5>Leave a Review</h5>
+
+    <!-- http://getbootstrap.com/docs/4.1/components/forms/ -->
+    <form  id="book_reviews" method="post" >
+
+        <!-- JL form starts here -->
+
+
+         <div class="row ">
+
+            <div class="col">
+
+           <label for="book_rating">Rate your book (between 1 and 5):</label>
+     <input type="number" id="book_rating" name="book_rating" min="1" max="5">
+         </div>
+
+         </div>
+
+
+
+
+        <!-- http://getbootstrap.com/docs/4.1/components/buttons/ -->
+        <button class="btn btn-primary" type="submit" ">Submit</button>
+
+
+    </form>
+
+    <label for="book_review">Leave a review!:</label>
+
+    <textarea id="book_review" form="book_reviews" name="book_review" rows="4" cols="50">
+      Leave A review of the book here.
+    </textarea>
 
 {% endblock %}
+
+  <!--
+
+reviews tables:
+  review_id	integer Auto Increment [nextval('reviews_review_id_seq')]
+  username	character varying(1000)
+  id	integer
+  review_text	text
+  book_id	integer
+  title	character varying(1000)
+  isbn	character varying(280)
+  author	character varying(1000)
+  year	character varying(280)
+  book_rating	integer
+
+
+review_stats table:
+  review_stat_id	integer Auto Increment [nextval('review_stats_review_stat_id_seq')]
+review_id	integer
+num_ratings	integer
+average_ratings	integer
+num_reviews	integer
+book_rating	integer
+book_id	integer
+
+
+books table:
+
+book_id	integer Auto Increment [nextval('books_book_id_seq')]
+isbn	character varying(1000)
+title	character varying(1000)
+author	character varying(1000)
+year	character varying(280)
+
+
+user table:
+
+id	integer Auto Increment [nextval('users_id_seq')]
+username	character varying(280)
+hash	text
+  """    -->
