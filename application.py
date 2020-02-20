@@ -68,6 +68,7 @@ def check():
 
     if not usernames and username:
         print("what the heck")
+        flash("You were successfully logged in")
         return jsonify(True)
     else:
         return jsonify(False)
@@ -110,7 +111,7 @@ def booksearch():
             title= :title",{ "title": title}).fetchall()
 
         author_matches = db.execute("SELECT book_id, author, title, isbn, year FROM books WHERE \
-             author= :author ",{ "author": author}).fetchall()
+             author LIKE :'%author%'").fetchall()
 
         book_id = db.execute("SELECT book_id FROM books WHERE \
             title= :title", { "title": title}).fetchall()
@@ -206,6 +207,9 @@ def book(isbn):
 
         if data.status_code != 200:
             return apology("ERROR: invalid isbn number, please try another entry", 422)
+
+
+
         print(data)
 
         data=data.json()
@@ -299,6 +303,51 @@ def book(isbn):
 
 
 
+@app.route("/api/book/<isbn>")
+def book_api(isbn):
+    """return details about a single book with api get request"""
+
+    #ensure book exists
+
+    book_data= db.execute("SELECT isbn, title, author, year FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchone()
+
+    if book_data is None:
+        return jsonify({"error": "Invalid ISBN number or ISBN not in database"}), 404
+
+
+    #get review data
+    review_data = db.execute("SELECT review_text, book_rating, username FROM reviews WHERE \
+    isbn= :isbn ", { "isbn": isbn} ).fetchall()
+
+
+    #get ratings data
+    ratings_data= db.execute("SELECT num_ratings, average_ratings FROM review_stats WHERE \
+    isbn= :isbn ", { "isbn": isbn} ).fetchall()
+
+
+    #get goodreads data
+
+    key = 'BXNCOXAo2IEQ56qLvIrow'
+
+    data=requests.get("https://www.goodreads.com/book/review_counts.json", params={'key': key, 'isbns': isbn})
+
+    if data.status_code != 200:
+        return apology("ERROR: invalid isbn number, please try another entry", 422)
+
+
+    #book_data= book_data.json(), review_data=review_data.json(), ratings_data=ratings_data.json(), data=data.json()
+
+    return jsonify({
+
+            "title": book_data.title,
+            "author": book_data.author,
+            "year": book_data.year,
+            "isbn": book_data.isbn
+
+    })
+
+
+
 
 
 
@@ -337,7 +386,8 @@ def login():
         # Redirect user to home page
         return redirect("/")
 
-    # User reached route via GET (as by clicking a link or via redirect)
+        # User reached route via GET (as by clicking a link or via redirect)
+
     else:
         return render_template("login.html")
 
@@ -400,17 +450,25 @@ def register():
         if not request.form.get("password") == request.form.get("confirmation"):
             return apology("passwords dont match", 400)
 
-        hash = generate_password_hash(request.form.get("password"),  "sha256")
+        else:
 
-        username = request.form.get("username")
-        db.execute("INSERT INTO users (username, hash) VALUES(:username, :hash)",
-                   {"username": username, "hash": hash})
-        db.commit()
+            hash = generate_password_hash(request.form.get("password"),  "sha256")
+
+            username = request.form.get("username")
+            db.execute("INSERT INTO users (username, hash) VALUES(:username, :hash)",
+                       {"username": username, "hash": hash})
+            db.commit()
 
 
-        session.get("user_id")
 
-        return redirect("/login")
+            session.get("user_id")
+
+            if session.get("user_id"):
+                    flash("You were successfully logged in")
+                    return redirect("/login")
+            flash("You were successfully logged in")
+
+            return redirect("/login")
 
 def errorhandler(e):
     """Handle error"""
