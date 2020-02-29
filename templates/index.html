@@ -13,6 +13,7 @@
           <h1 class="display-6">Welcome to JO's Book Review APP</h1>
 
 
+          {% if session.user_id %}
           <div class="row d-flex justify-content-center">
             <div class="container">
               <div class="row">
@@ -30,10 +31,36 @@
             </div>
           </div>
 
+          {% else %}
         <!-- Example row of columns -->
 
 
+        <div class="row d-flex justify-content-center">
+          <div class="container">
+            <div class="row">
+              <!--Grid column-->
+              <div class="col-md-12">
+              <div class="text-center">
 
+                <p>Login or Register Below </p>
+
+                <div class="row  d-flex justify-content-center">
+
+                <p><a class="btn btn-secondary" href="/login" role="button">Login</a></p>
+
+                  <span> <br> </span>
+
+                <p><a class="btn btn-secondary" href="/register" role="button">Register Here</a></p>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+          </div>
+          </div>
+            </div>
+            {% endif %}
+        </div>
 
             {% endblock %}
         </main>

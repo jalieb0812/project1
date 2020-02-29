@@ -12,23 +12,11 @@
 
     <p></p>
 
-        <div >
-
 <p>search results by isbn matches</p>
-    <ul>
-        {% for book in isbn_matches %}
-            <li>
-                <a href="{{ url_for('book', isbn=book.isbn, title=book.title, author=book.author, year=book.year, data=data) }}">
-                  {{ book.isbn, book.title, book.author, book.year }}
-                </a>
-            </li>
-            {% else %}
-            <li>None</li>
-        {% endfor %}
-    </ul>
 
-<p>search results by isbn matches</p>
+
           <ul>
+
               {% for book in isbn_matches %}
                   <li>
                       <a href="{{ url_for('book', isbn=book.isbn, title=book.title, author=book.author, year=book.year, data=data) }}">
@@ -36,10 +24,10 @@
                       </a>
                   </li>
                   {% else %}
-                  <li>None</li>
+                  <li>No results for search by ISBN</li>
               {% endfor %}
-          </ul>
 
+              </ul>
 <p>search results by Title matches</p>
 
           <ul>
@@ -51,57 +39,52 @@
                   </li>
 
                   {% else %}
-                  <li>None</li>
+                  <li>No Reults for search by Title</li>
               {% endfor %}
+
           </ul>
 
 <p>search results by author</p>
           <ul>
+
               {% for book in author_matches %}
                   <li>
                       <a href="{{ url_for('book', isbn=book.isbn, title=book.title, author=book.author, year=book.year, data=data) }}">
                           {{ book.title }} by {{ book.author }} with ISBN No. {{book.isbn}} published in the year {{book.year}}
                       </a>
                   </li>
-
                   {% else %}
-                  <li>None</li>
+                  <li>No results for search by author</li>
               {% endfor %}
+
           </ul>
 
 
-<p>books results by title or author</p>
-<form action="/book/{{isbn}}" method="post" >
-<div class="form-group">
-
-      <select autofocus class="form-log" name="book_choice" style="width:50%">
-        <option disabled="" selected="" value="">book</option>
-          {% for book in matches %}
-      <<option value="{{ book.title }} by {{ book.author }} with IBSN nunumber:{{book.isbn}} Published in the year {{book.year}}">{{ book.title }} by {{ book.author }} with {{book.isbn}} in the year {{book.year}}</option>
-
-          {% endfor %}
-      </select>
-  </div>
-
-    <button class="btn btn-primary" type="submit">Submit</button>
-</form>
-
-<p>books results by title or author</p>
-<form action="/book/{{isbn}}" method="post" >
-<div class="form-group">
-
-      <select autofocus class="form-log" name="book_choice2" style="width:50%" onchange="location = this.value;">
-        <option disabled="" selected="" value="">book</option>
-          {% for book in matches %}
-      <option value="{{ url_for('book', isbn=isbn.book, title=book.title, author=book.author, year=book.year, data=data) }}">{{ book.title }} by {{ book.author }} with {{book.isbn}} in the published in the year {{book.year}}</option>
-
-          {% endfor %}
-      </select>
-  </div>
 
 
-</form>
+  <!-- http://getbootstrap.com/docs/4.1/components/forms/ -->
 
 
 
-{% endblock %}
+  <!--
+    <p> All matching search results </p>
+
+            <form method="post" >
+              <div class="form-group">
+
+                  <select autofocus class="form-log" name="book_choice2" style="width:50%" onchange="location = this.value;">
+                    <option disabled="" selected="" value="">book</option>
+
+                    {% if matches %}
+                      {% for book in matches %}
+                  <option value="{{ url_for('book', isbn=book.isbn, title=book.title, author=book.author, year=book.year, data=data) }}">  {{ book.title }} by {{ book.author }} with ISBN No. {{book.isbn}} published in the year {{book.year}}</option>
+                  {% else %}
+                  <option value="No matches found. Please try another entry"</option>
+                    {% endfor %}
+                      {% endif %}
+                  </select>
+              </div>
+            </form>
+
+    -->
+   {% endblock %}
