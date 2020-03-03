@@ -1,8 +1,10 @@
 Flask
 Flask-Session
-psycopg2-binary
+psycopg2
+passlib
 SQLAlchemy
 requests
 goodreads
 gunicorn
-Werkzeug 0.16.0
+Werkzeug==0.16.0
+Procfile
