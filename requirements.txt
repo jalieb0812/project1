@@ -5,3 +5,4 @@ SQLAlchemy
 requests
 goodreads
 gunicorn
+Werkzeug 0.16.0
